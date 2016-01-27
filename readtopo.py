@@ -6,19 +6,19 @@ import sys
 
 class Topo:
     def __init__(self, yaml_string):
-        raw = yaml.load(yaml_string)
+        self.raw = yaml.load(yaml_string)
         self.G = nx.Graph()
         self.hops = defaultdict(list)
         self.hops_edges = defaultdict(list)
-        if 'root' not in raw.iterkeys():
+        if 'root' not in self.raw.iterkeys():
             print 'Graph has no root!'
             sys.exit(1)
-        self.root = str(raw.pop('root'))
+        self.root = str(self.raw.pop('root'))
         self.G.add_node(self.root)
-        for node in raw.iterkeys():
+        for node in self.raw.iterkeys():
             self.G.add_node(str(node))
 
-        for node, edges in raw.iteritems():
+        for node, edges in self.raw.iteritems():
             for edge in edges:
                 self.G.add_edge(str(node), str(edge))
 
@@ -71,8 +71,37 @@ class Topo:
         #f.savefig("graph.png")
         plt.show()
 
+
+    def generate_ignore_block(self, node, ignored):
+        def _ignore_neighbor(neighbor, OID="::212:6d02:0:"):
+            return 'storm.os.ignoreNeighbor("{0}{1}")'.format(OID, neighbor)
+        code = 'if (storm.os.nodeid() == {0}):\n\t'.format(int(node, 16))
+        code += '\n\t'.join(map(_ignore_neighbor, ignored))
+        return code
+
+    def to_code(self):
+        edges = list(nx.traversal.bfs_edges(self.G, self.root))
+        node_set = set(self.G.nodes())
+        ignoreblocks = []
+        for node in self.G.nodes():
+            allowed_neighbors = set(self.G[node].keys())
+            allowed_neighbors.add(node) # add yourself
+            ignore_these = node_set.difference(allowed_neighbors)
+
+            ignoreblocks.append(self.generate_ignore_block(node, ignore_these))
+
+        framework = """sh = require "stormsh"
+sh.start()
+{0}
+cord.enter_loop()
+"""
+        print framework.format('\n'.join(ignoreblocks))
+
+
+
 if __name__ == '__main__':
     filename = sys.argv[1]
     print 'Loading topology from {0}'.format(filename)
     topo = Topo(open(filename).read())
     topo.draw()
+    topo.to_code()
