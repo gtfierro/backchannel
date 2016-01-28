@@ -1,10 +1,10 @@
 [submodule "contrib"]
 	path = contrib
 	url = https://github.com/SoftwareDefinedBuildings/ioet_contrib.git
-[submodule "toolchains/storm_elua"]
-	path = toolchains/storm_elua
-	url = https://github.com/SoftwareDefinedBuildings/storm_elua
 [submodule "toolchains/stormport"]
 	path = toolchains/stormport
 	url = https://github.com/SoftwareDefinedBuildings/stormport.git
 	branch = kernel0
+[submodule "elua"]
+	path = toolchains/elua
+	url = https://github.com/SoftwareDefinedBuildings/storm_elua
