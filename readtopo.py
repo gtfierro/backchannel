@@ -67,16 +67,19 @@ class Topo:
                                    width=edge_tickness, alpha=edge_alpha, edge_color=edge_color)
         nx.draw_networkx_labels(self.G, graph_pos,font_size=node_text_size)
 
-        print "Drawing..."
+        #print "Drawing..."
         #f.savefig("graph.png")
-        plt.show()
+        #plt.show()
 
 
     def generate_ignore_block(self, node, ignored):
         def _ignore_neighbor(neighbor, OID="::212:6d02:0:"):
             return 'storm.os.ignoreNeighbor("{0}{1}")'.format(OID, neighbor)
-        code = 'if (storm.os.nodeid() == {0}):\n\t'.format(int(node, 16))
-        code += '\n\t'.join(map(_ignore_neighbor, ignored))
+        code = ''
+        if len(ignored) > 0:
+            code += 'if (storm.os.nodeid() == {0}) then\n\t'.format(int(node, 16))
+            code += '\n\t'.join(map(_ignore_neighbor, ignored))
+            code += '\nend'
         return code
 
     def to_code(self):
@@ -95,7 +98,9 @@ sh.start()
 {0}
 cord.enter_loop()
 """
-        print framework.format('\n'.join(ignoreblocks))
+        code = framework.format('\n'.join(ignoreblocks))
+        with open('./main.lua', 'w') as f:
+            f.write(code)
 
 
 
