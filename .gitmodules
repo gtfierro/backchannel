@@ -8,3 +8,6 @@
 [submodule "elua"]
 	path = toolchains/elua
 	url = https://github.com/SoftwareDefinedBuildings/storm_elua
+[submodule "toolchains/elua"]
+	path = toolchains/elua
+	url = https://github.com/gtfierro/storm_elua
