@@ -5,9 +5,6 @@
 	path = toolchains/stormport
 	url = https://github.com/SoftwareDefinedBuildings/stormport.git
 	branch = kernel0
-[submodule "elua"]
-	path = toolchains/elua
-	url = https://github.com/SoftwareDefinedBuildings/storm_elua
 [submodule "toolchains/elua"]
 	path = toolchains/elua
 	url = https://github.com/gtfierro/storm_elua
