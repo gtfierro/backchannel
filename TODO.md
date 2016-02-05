@@ -47,3 +47,5 @@ to this (in no real order):
         ignore = 4014
         isroot = true
         ```
+- This will involve making a new barebones "Makefile" maybe called "Makefile.backchannel", which we will invoke using "make -f Makefile.backchannel"
+  and will be edited directly by the program reading the config file above.
