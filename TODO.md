@@ -6,11 +6,11 @@ It would be very helpful to consolidate all of the build process for an entire
 deployment of motes: both border router *and* the deployed motes. There are several parts
 to this (in no real order):
 
-- change sload so that it has a separate cache for each mote ID. This is to
-  prevent a cascading cache invalidation that occurs when we flash all of the
-  motes in some order, and should hopefully speed up the programming process by
-  a fair amount
-- Augment the YAML configuration file. We really want this to do a collection of things:
+[x] change sload so that it has a separate cache for each mote ID. This is to
+    prevent a cascading cache invalidation that occurs when we flash all of the
+    motes in some order, and should hopefully speed up the programming process by
+    a fair amount [commit](https://github.com/gtfierro/stormloader/commit/3274031958fea6c9b3c8d1ab2807823e6d4f7995)
+[ ] Augment the YAML configuration file. We really want this to do a collection of things:
     - build flags on a per-mote basis
     - we also want 'collections' of build-flags for certain classes of motes -- most obviously border router and normal mote
         ```cfg
@@ -47,5 +47,5 @@ to this (in no real order):
         ignore = 4014
         isroot = true
         ```
-- This will involve making a new barebones "Makefile" maybe called "Makefile.backchannel", which we will invoke using "make -f Makefile.backchannel"
+[ ] This will involve making a new barebones "Makefile" maybe called "Makefile.backchannel", which we will invoke using "make -f Makefile.backchannel"
   and will be edited directly by the program reading the config file above.
