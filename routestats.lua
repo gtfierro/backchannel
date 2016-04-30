@@ -20,7 +20,7 @@ s = storm.net.udpsocket(4444, function(msg, ip)
 end)
 
 i = 0
-dest = "ipaddr here"
+dest = "ip here"
 storm.net.clearretrystats()
 storm.net.clearroutestats()
 function dosend() 
@@ -36,15 +36,14 @@ function dosend()
     mi_recv = res:get_as(storm.array.UINT8, 1)
     rs_sent = res:get_as(storm.array.UINT8, 2)
     rs_recv = res:get_as(storm.array.UINT8, 3)
+    hop_cnt = res:get_as(storm.array.UINT8, 4)
 
-    print(string.format("MI sent/recv: %d/%d RS sent/reccv %d/%d", mi_sent, mi_recv, rs_sent, rs_recv))
-    pkt = {seq = i, pkt = pkt_cnt, tx = tx_cnt,  mi_sent = mi_sent, mi_recv = mi_recv, rs_sent = rs_sent, rs_recv = rs_recv}
+    print(string.format("MI sent/recv: %d/%d RS sent/reccv %d/%d hopcount", mi_sent, mi_recv, rs_sent, rs_recv, hop_cnt))
+    pkt = {seq = i, pkt = pkt_cnt, tx = tx_cnt,  mi_sent = mi_sent, mi_recv = mi_recv, rs_sent = rs_sent, rs_recv = rs_recv, hop_cnt = hop_cnt}
     rv = storm.net.sendto(s, storm.mp.pack(pkt), dest, 4444)
     i = i + 1
-    if rv > 0 then
-        storm.net.clearretrystats()
-        storm.net.clearroutestats()
-    end
+    storm.net.clearretrystats()
+    storm.net.clearroutestats()
 end
 
 storm.os.invokePeriodically(10 * storm.os.SECOND, dosend)
